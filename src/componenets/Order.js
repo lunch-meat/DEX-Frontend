@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 // Import Material-UI Components
 import PropTypes from 'prop-types';
@@ -8,6 +9,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 
+// Import Order Actions
+import { ordersFetchData } from '../actions/orders';
+
+// Declare Styles
 const styles = theme => ({
   root: {
     width: '100%',
@@ -17,31 +22,57 @@ const styles = theme => ({
 });
 
 class Order extends Component {
+  componentDidMount() {
+    this.props.fetchData('http://localhost:8000/orders/1');
+  }
+
   render() {
-    const { classes } = this.props;
+    if (this.props.hasErrored) {
+      return <p>Sorry! There was an error loading the items</p>;
+    }
+
+    if (this.props.isLoading) {
+      return <p>Loading…</p>;
+    }
+
     return (
-      <div className={classes.root}>
-        <List>
+      <List>
+        {this.props.orders.map(order => (
           <ListItem>
             <Avatar />
-            <ListItemText primary="Order 1" secondary="Price: $" />
+            <ListItemText
+              primary={`${order.Quantity} of ${order.name}`}
+              secondary={`Price: $ ${order.price}`}
+            />
           </ListItem>
-          <ListItem>
-            <Avatar />
-            <ListItemText primary="Order 2" secondary="Price: $" />
-          </ListItem>
-          <ListItem>
-            <Avatar />
-            <ListItemText primary="Order 3" secondary="Price: $" />
-          </ListItem>
-        </List>
-      </div>
+        ))}
+      </List>
     );
   }
 }
 
 Order.propTypes = {
   classes: PropTypes.object.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  orders: PropTypes.array.isRequired,
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
-export default withStyles(styles)(Order);
+const mapStateToProps = state => {
+  return {
+    orders: state.orders,
+    hasErrored: state.ordersHasErrored,
+    isLoading: state.ordersIsLoading,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchData: url => dispatch(ordersFetchData(url)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(Order),
+);

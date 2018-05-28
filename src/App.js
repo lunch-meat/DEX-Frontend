@@ -63,9 +63,8 @@ class ClippedDrawer extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Typography noWrap>
-            <Order />
-          </Typography>
+
+          <Order />
         </main>
       </div>
     );
