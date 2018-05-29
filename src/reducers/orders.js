@@ -1,6 +1,6 @@
 export function ordersHasErrored(state = false, action) {
   switch (action.type) {
-    case 'orders_HAS_ERRORED':
+    case 'ORDER_HAS_ERRORED':
       return action.hasErrored;
 
     default:
@@ -10,7 +10,7 @@ export function ordersHasErrored(state = false, action) {
 
 export function ordersIsLoading(state = false, action) {
   switch (action.type) {
-    case 'orders_IS_LOADING':
+    case 'ORDER_IS_LOADING':
       return action.isLoading;
 
     default:
@@ -20,7 +20,7 @@ export function ordersIsLoading(state = false, action) {
 
 export function orders(state = [], action) {
   switch (action.type) {
-    case 'orders_FETCH_DATA_SUCCESS':
+    case 'ORDER_FETCH_DATA_SUCCESS':
       return action.orders;
 
     default:

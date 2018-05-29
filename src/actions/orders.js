@@ -2,21 +2,21 @@ import axios from 'axios';
 
 export function ordersHasErrored(bool) {
   return {
-    type: 'orders_HAS_ERRORED',
+    type: 'ORDER_HAS_ERRORED',
     hasErrored: bool,
   };
 }
 
 export function ordersIsLoading(bool) {
   return {
-    type: 'orders_IS_LOADING',
+    type: 'ORDER_IS_LOADING',
     isLoading: bool,
   };
 }
 
 export function ordersFetchDataSuccess(orders) {
   return {
-    type: 'orders_FETCH_DATA_SUCCESS',
+    type: 'ORDER_FETCH_DATA_SUCCESS',
     orders,
   };
 }

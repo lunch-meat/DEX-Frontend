@@ -9,7 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 // Import Components
-import Purchase from './componenets/Purchase';
+import Purchase from './containers/Purchase';
 import Order from './componenets/Order';
 
 // Declare Drawer Width
