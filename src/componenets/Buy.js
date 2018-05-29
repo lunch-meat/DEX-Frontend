@@ -1,37 +1,77 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import Material-UI Components
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
+import { TextField, MenuItem } from '@material-ui/core';
 
 // Import Buy Actions
 import { productFetchData, buyOrderPostData } from '../actions/buyOrder';
 
 // Declare Styles
 const styles = theme => ({
-  root: {
-    width: '100%',
-    height: '100%',
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
   },
 });
 
 class Buy extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      Id: 0,
+      name: '',
+      price: 0,
+      quantityAvailable: 0,
+    };
+  }
   componentDidMount() {
     this.props.fetchData('http://localhost:8000/products');
   }
 
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
   render() {
-    console.log(this.props.products);
+    const { classes } = this.props;
+
+    const Products = () =>
+      this.props.products.length ? (
+        <TextField
+          name="name"
+          id="select-product"
+          select
+          label="Select"
+          className={classes.textField}
+          value={this.state.name}
+          onChange={this.handleChange}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          helperText="Please select the Product"
+          margin="normal"
+        >
+          {this.props.products.map(product => (
+            <MenuItem key={product.Id} value={product.name}>
+              {product.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      ) : null;
+
     return (
       <div>
-        {this.props.products.map(product => {
-          <p key={product.Id}>{product.name}</p>;
-        })}
+        <Products />
       </div>
     );
   }

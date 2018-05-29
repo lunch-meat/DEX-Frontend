@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import Material-UI Components
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -27,6 +27,8 @@ class Order extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     if (this.props.hasErrored) {
       return <p>Sorry! There was an error loading the items</p>;
     }
@@ -36,7 +38,7 @@ class Order extends Component {
     }
 
     return (
-      <List>
+      <List className={classes.root}>
         {this.props.orders.map(order => (
           <ListItem key={order.Id}>
             <Avatar />
