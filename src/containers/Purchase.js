@@ -41,11 +41,7 @@ class Purchase extends Component {
           </Tabs>
         </Paper>
         <div>
-          {value === 0 && (
-            <div>
-              <Buy />
-            </div>
-          )}
+          {value === 0 && <Buy />}
           {value === 1 && (
             <div>
               <Typography>Item Two</Typography>

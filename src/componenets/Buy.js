@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 // Import Material-UI Components
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, MenuItem } from '@material-ui/core';
+import { TextField, MenuItem, InputAdornment } from '@material-ui/core';
 
 // Import Buy Actions
 import { productFetchData, buyOrderPostData } from '../actions/buyOrder';
 
 // Declare Styles
 const styles = theme => ({
+  root: {
+    textAlign: 'center',
+  },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
+    flexBasis: 200,
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  withoutLabel: {
+    marginTop: theme.spacing.unit * 3,
   },
 });
 
@@ -23,10 +34,10 @@ class Buy extends Component {
     super(props);
 
     this.state = {
-      Id: 0,
+      index: 0,
       name: '',
       price: 0,
-      quantityAvailable: 0,
+      quantity: 0,
     };
   }
   componentDidMount() {
@@ -38,40 +49,76 @@ class Buy extends Component {
     this.setState({
       [name]: value,
     });
+
+    if (name === 'name') {
+      this.setState({ index: value });
+    }
+
+    console.log(this.state.name);
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, products } = this.props;
+    const { index, quantity, name } = this.state;
 
-    const Products = () =>
-      this.props.products.length ? (
-        <TextField
-          name="name"
-          id="select-product"
-          select
-          label="Select"
-          className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange}
-          SelectProps={{
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select the Product"
-          margin="normal"
-        >
-          {this.props.products.map(product => (
-            <MenuItem key={product.Id} value={product.name}>
-              {product.name}
-            </MenuItem>
-          ))}
-        </TextField>
-      ) : null;
+    const ProductsSelection = () => (
+      <TextField
+        name="name"
+        id="product"
+        value={name}
+        select
+        label="Select Product"
+        className={classes.textField}
+        onChange={this.handleChange}
+        SelectProps={{
+          MenuProps: {
+            className: classes.menu,
+          },
+        }}
+        margin="normal"
+      >
+        {products.map((product, index) => (
+          <MenuItem key={index} value={index}>
+            {product.name}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+
+    const QuantityInput = () => (
+      <TextField
+        value={quantity}
+        onChange={this.handleChange}
+        label="Quantity"
+        name="quantity"
+        id="product-quantity"
+        className={classNames(classes.margin, classes.textField)}
+      />
+    );
+
+    const PriceInput = () => (
+      <TextField
+        disabled
+        label="Price"
+        name="price"
+        id="product-price"
+        value={products[index].price * quantity}
+        className={classNames(classes.margin, classes.textField)}
+        InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        }}
+      />
+    );
 
     return (
-      <div>
-        <Products />
+      <div className={classes.root}>
+        {products.length !== 0 ? (
+          <div>
+            <ProductsSelection />
+            <QuantityInput />
+            <PriceInput />
+          </div>
+        ) : null}
       </div>
     );
   }
