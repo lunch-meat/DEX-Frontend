@@ -9,7 +9,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 
-// Import Order Actions
+// Import Buy Actions
+import { productFetchData, buyOrderPostData } from '../actions/buyOrder';
 
 // Declare Styles
 const styles = theme => ({
@@ -21,25 +22,44 @@ const styles = theme => ({
 
 class Buy extends Component {
   componentDidMount() {
-    //this.props.fetchData('http://localhost:8000/orders/1');
+    this.props.fetchData('http://localhost:8000/products');
   }
 
   render() {
-    return <div />;
+    console.log(this.props.products);
+    return (
+      <div>
+        {this.props.products.map(product => {
+          <p key={product.Id}>{product.name}</p>;
+        })}
+      </div>
+    );
   }
 }
 
 Buy.propTypes = {
   classes: PropTypes.object.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  postData: PropTypes.func.isRequired,
+  buyOrder: PropTypes.bool.isRequired,
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  products: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    products: state.products,
+    buyOrder: state.buyOrder,
+    isLoading: state.buyOrderIsLoading,
+    hasErrored: state.buyOrderHasErrored,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchData: url => dispatch(),
+    fetchData: url => dispatch(productFetchData(url)),
+    postData: (url, header) => dispatch(buyOrderPostData(url, header)),
   };
 };
 

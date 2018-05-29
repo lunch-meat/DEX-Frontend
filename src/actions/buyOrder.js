@@ -41,14 +41,14 @@ export function buyOrderPostData(url, header) {
   };
 }
 
-export function productFetchData(products) {
+export function productFetchDataSuccess(products) {
   return {
-    type: 'PRODUCT_FETCH_DATA',
+    type: 'PRODUCT_FETCH_DATA_SUCCESS',
     products,
   };
 }
 
-export function buyOrderFetchData(url) {
+export function productFetchData(url) {
   return dispatch => {
     axios
       .get(url)
@@ -59,6 +59,6 @@ export function buyOrderFetchData(url) {
 
         return response;
       })
-      .then(response => dispatch(productFetchData(response.data)));
+      .then(response => dispatch(productFetchDataSuccess(response.data)));
   };
 }

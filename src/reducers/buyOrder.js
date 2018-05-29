@@ -30,7 +30,7 @@ export function buyOrder(state = false, action) {
 
 export function products(state = [], action) {
   switch (action.type) {
-    case 'PRODTUCT_FETCH_DATA':
+    case 'PRODUCT_FETCH_DATA_SUCCESS':
       return action.products;
 
     default:

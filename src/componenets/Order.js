@@ -38,7 +38,7 @@ class Order extends Component {
     return (
       <List>
         {this.props.orders.map(order => (
-          <ListItem>
+          <ListItem key={order.Id}>
             <Avatar />
             <ListItemText
               primary={`${order.Quantity} of ${order.name}`}

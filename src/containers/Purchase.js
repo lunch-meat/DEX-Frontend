@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import BuyIcon from '@material-ui/icons/AddShoppingCart';
 import SellIcon from '@material-ui/icons/RemoveShoppingCart';
 
+// Import Buy and Sell Components
+import Buy from '../componenets/Buy';
+
 class Purchase extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +43,7 @@ class Purchase extends Component {
         <div>
           {value === 0 && (
             <div>
-              <Typography>Item One</Typography>
+              <Buy />
             </div>
           )}
           {value === 1 && (
