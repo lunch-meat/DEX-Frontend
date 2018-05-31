@@ -12,7 +12,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
 
 // Import Order Actions
 import { ordersFetchData } from '../actions/orders';
@@ -20,22 +20,21 @@ import { ordersFetchData } from '../actions/orders';
 // Declare Styles
 const styles = theme => ({
   root: {
-    width: '100%',
     margin: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
+  avatar: {},
   table: {
-    minWidth: 400,
+    minWidth: 500,
   },
-  row: {},
   cell: {
-    color: purple[500],
+    color: green[500],
   },
 });
 
 class OrderTable extends Component {
   componentDidMount() {
-    this.props.fetchData('http://localhost:8000/orders/1');
+    this.props.fetchData('http://localhost:8000/api/orders/1');
   }
 
   render() {
@@ -54,7 +53,7 @@ class OrderTable extends Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell numeric>Logo</TableCell>
+              <TableCell>Logo</TableCell>
               <TableCell>Product</TableCell>
               <TableCell numeric>Quantity</TableCell>
               <TableCell numeric>Price</TableCell>
@@ -64,20 +63,20 @@ class OrderTable extends Component {
             {this.props.orders.map(order => {
               return (
                 <TableRow key={order.Id}>
-                  <TableCell numeric>
-                    {' '}
+                  <TableCell className={classes.avatar}>
                     <Avatar
                       alt="Remy Sharp"
-                      src={`/static/images/${order.logo}`}
-                      className={classes.avatar}
+                      src={`/static/images/${order.product.logo}`}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {order.name}
+                    {order.product.name}
                   </TableCell>
-                  <TableCell numeric>{order.Quantity}</TableCell>
+                  <TableCell numeric>{order.quantity}</TableCell>
                   <TableCell
-                    className={order.Order_Type === 1 ? classes.cell : null}
+                    className={
+                      order.coinOrderType.id === 1 ? classes.cell : null
+                    }
                     numeric
                   >
                     {order.price}

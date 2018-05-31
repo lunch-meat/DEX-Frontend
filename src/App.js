@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 // Import Components
 import Purchase from './containers/Purchase';
 import OrderTable from './componenets/OrderTable';
-import Grid from '@material-ui/core/Grid';
+
 // Declare Drawer Width
 const drawerWidth = 350;
 
@@ -53,23 +53,21 @@ class ClippedDrawer extends Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Grid item xs={3}>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div className={classes.toolbar} />
-            <Purchase />
-          </Drawer>
-        </Grid>
-        <Grid item xs={5}>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <OrderTable />
-          </main>
-        </Grid>
+
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <Purchase />
+        </Drawer>
+
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <OrderTable />
+        </main>
       </div>
     );
   }
