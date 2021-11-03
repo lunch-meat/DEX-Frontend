@@ -49,7 +49,7 @@ class ClippedDrawer extends Component {
         <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
             <Typography variant="title" color="inherit" noWrap>
-              BlockX Labs DEX
+              Coin Give
             </Typography>
           </Toolbar>
         </AppBar>
