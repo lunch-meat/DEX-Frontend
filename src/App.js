@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 // Import Components
 import Purchase from './containers/Purchase';
-import OrderTable from './componenets/OrderTable';
+import OrderTable from './components/OrderTable';
 
 // Declare Drawer Width
 const drawerWidth = 350;
@@ -19,14 +19,15 @@ const drawerWidth = 350;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
     display: 'flex',
-    width: '100%',
+    width: '350px',
+    margin: '1px auto auto auto',
+    border: '1px dashed #D3D3D3',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    color: 'white',
+    margin: '1px auto auto auto',
   },
   drawerPaper: {
     position: 'relative',
@@ -45,6 +46,7 @@ class ClippedDrawer extends Component {
     const { classes } = this.props;
 
     return (
+        <div className={classes.border}>
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
@@ -56,6 +58,7 @@ class ClippedDrawer extends Component {
 
         <Drawer
           variant="permanent"
+          anchor="top"
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -64,11 +67,12 @@ class ClippedDrawer extends Component {
           <Purchase />
         </Drawer>
 
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <OrderTable />
-        </main>
+        {/*<main className={classes.content}>*/}
+        {/*  <div className={classes.toolbar} />*/}
+        {/*  <OrderTable />*/}
+        {/*</main>*/}
       </div>
+        </div>
     );
   }
 }

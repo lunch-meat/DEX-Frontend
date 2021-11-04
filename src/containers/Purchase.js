@@ -11,7 +11,7 @@ import SellIcon from '@material-ui/icons/RemoveShoppingCart';
 import { withStyles } from '@material-ui/core/styles';
 
 // Import Buy and Sell Components
-import Buy from '../componenets/Buy';
+import Buy from '../components/Buy';
 
 const styles = theme => ({
   root: {
@@ -47,7 +47,7 @@ class Purchase extends Component {
     // Declare Tab Container Component, takes in child node, and swipe direction
     const TabContainer = ({ children, dir }) => {
       return (
-        <div dir={dir} style={{ padding: 8 * 3 }}>
+        <div dir={dir} style={{ padding: 2 * 3 }}>
           {children}
         </div>
       );
@@ -63,8 +63,8 @@ class Purchase extends Component {
             textColor="primary"
             fullWidth
           >
-            <Tab icon={<BuyIcon />} label="BUY" />
-            <Tab icon={<SellIcon />} label="SELL" />
+            <Tab  label="1. GIVE" />
+            <Tab  label="2. SHARE" />
           </Tabs>
         </AppBar>
         <SwipeableViews

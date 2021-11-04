@@ -6,11 +6,16 @@ import NumberFormat from 'react-number-format';
 
 // Import Material-UI Components
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, MenuItem } from '@material-ui/core';
+import {TextField, MenuItem, Icon, ListItemIcon, SvgIcon} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 // Import Buy Actions
 import { productFetchData, buyOrderPostData } from '../actions/buyOrder';
+import {Image} from "@material-ui/icons";
+
+// import icons
+import ltc from './cryptoIcons/litecoin.jpg';
+import dotQrCode from './cryptoIcons/dot qr code.png';
 
 // Declare Styles
 const styles = theme => ({
@@ -20,7 +25,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
+    width: 250,
     flexBasis: 200,
   },
   margin: {
@@ -42,7 +47,7 @@ class Buy extends Component {
     this.state = {
       name: '',
       quantityWanted: '',
-      quantityLabel: 'Quantity',
+      quantityLabel: 'Amount',
       quantityError: false,
       buyOrderError: false,
       totalPrice: '',
@@ -126,7 +131,7 @@ class Buy extends Component {
       this.setState({
         buyOrderError: true,
       });
-      alert('No Product or Quantity Selected');
+      alert('No coin or quantity selected');
       return true;
     }
 
@@ -163,7 +168,7 @@ class Buy extends Component {
         name="name"
         value={name}
         onChange={this.handleChange}
-        label="Select Product"
+        label="Select Coin"
         className={classes.textField}
         SelectProps={{
           MenuProps: {
@@ -174,6 +179,9 @@ class Buy extends Component {
       >
         {products.map((product, index) => (
           <MenuItem key={index} value={index}>
+            <ListItemIcon>
+              <img src={ltc} />
+            </ListItemIcon>
             {product.name}
           </MenuItem>
         ))}
@@ -206,7 +214,6 @@ class Buy extends Component {
         className={classNames(classes.margin, classes.textField)}
         value={totalPrice}
         disabled
-        label="Price"
         name="totalPrice"
         id="product-price"
         InputProps={{
@@ -234,26 +241,30 @@ class Buy extends Component {
               id="product-quantity"
               className={classNames(classes.margin, classes.textField)}
             />
+
             <PriceInput />
+            <div className={classNames(classes.margin)} >
+              <img src={dotQrCode} />
+            </div>
             <Button
               onClick={this.handlePostOrder}
               variant="raised"
               color="primary"
               className={classes.button}
             >
-              Buy Coin
+              Give Coins!
             </Button>
           </div>
         ) : null}
-        {/* <Snackbar
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          open={buyOrderError}
-          onClose={this.handleClose}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">Please select an order.</span>}
-        /> */}
+        {/*<Snackbar*/}
+        {/*  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}*/}
+        {/*  open={buyOrderError}*/}
+        {/*  onClose={this.handleClose}*/}
+        {/*  ContentProps={{*/}
+        {/*    'aria-describedby': 'message-id',*/}
+        {/*  }}*/}
+        {/*  message={<span id="message-id">Please select an order.</span>}*/}
+        {/*/>*/}
       </div>
     );
   }
