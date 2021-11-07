@@ -55,7 +55,7 @@ class Purchase extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="black">
           <Tabs
             value={value}
             onChange={this.handleChange}
@@ -63,8 +63,8 @@ class Purchase extends Component {
             textColor="primary"
             fullWidth
           >
-            <Tab  label="Give Coins" />
-            {/*<Tab  label="2. SHARE" />*/}
+            <Tab  label="Donors" />
+            <Tab  label="Nonprofits" />
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -72,7 +72,7 @@ class Purchase extends Component {
           index={value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>
+          <TabContainer>
             <Buy onChangeIndex={this.handleChangeIndex} />
           </TabContainer>
           {/*<TabContainer dir={theme.direction}>Sell Stuff</TabContainer>*/}
