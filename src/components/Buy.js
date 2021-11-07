@@ -57,7 +57,7 @@ class Buy extends Component {
 
   // Fetch Product Data on Componenet Mount
   componentDidMount() {
-    this.props.fetchData('http://localhost:8000/api/products');
+    this.props.fetchData('https://crypto-for-charity.herokuapp.com/api/donation');
   }
 
   handleClose = () => {
