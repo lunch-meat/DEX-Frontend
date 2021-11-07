@@ -22,12 +22,13 @@ const styles = theme => ({
     display: 'flex',
     width: '350px',
     margin: '5em auto auto auto',
-    border: '1px dashed #D3D3D3',
+    border: '1px solid #D3D3D3',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: theme.zIndex.drawer,
     color: 'white',
-    margin: '1px auto auto auto',
+    margin: '0 auto auto auto',
+    backgroundColor: 'coral',
   },
   drawerPaper: {
     position: 'relative',
