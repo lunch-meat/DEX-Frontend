@@ -21,7 +21,7 @@ const styles = theme => ({
     flexGrow: 1,
     display: 'flex',
     width: '350px',
-    margin: '1px auto auto auto',
+    margin: '5em auto auto auto',
     border: '1px dashed #D3D3D3',
   },
   appBar: {
@@ -63,7 +63,7 @@ class ClippedDrawer extends Component {
             paper: classes.drawerPaper,
           }}
         >
-          <div className={classes.toolbar} />
+          {/*<div className={classes.toolbar} />*/}
           <Purchase />
         </Drawer>
 
