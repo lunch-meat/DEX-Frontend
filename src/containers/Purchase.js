@@ -63,8 +63,8 @@ class Purchase extends Component {
             textColor="primary"
             fullWidth
           >
-            <Tab  label="1. GIVE" />
-            <Tab  label="2. SHARE" />
+            <Tab  label="Give Coins" />
+            {/*<Tab  label="2. SHARE" />*/}
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -73,9 +73,9 @@ class Purchase extends Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={theme.direction}>
-            <Buy />
+            <Buy onChangeIndex={this.handleChangeIndex} />
           </TabContainer>
-          <TabContainer dir={theme.direction}>Sell Stuff</TabContainer>
+          {/*<TabContainer dir={theme.direction}>Sell Stuff</TabContainer>*/}
         </SwipeableViews>
       </div>
     );
