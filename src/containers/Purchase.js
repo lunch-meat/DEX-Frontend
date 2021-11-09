@@ -16,7 +16,7 @@ import Buy from '../components/Buy';
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 350,
+    width: 450,
   },
 });
 

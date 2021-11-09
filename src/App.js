@@ -11,16 +11,17 @@ import Typography from '@material-ui/core/Typography';
 // Import Components
 import Purchase from './containers/Purchase';
 import OrderTable from './components/OrderTable';
+import Buy from "./components/Buy";
 
 // Declare Drawer Width
-const drawerWidth = 350;
+const drawerWidth = 450;
 
 // Declare Styles
 const styles = theme => ({
   root: {
     flexGrow: 1,
     display: 'flex',
-    width: '350px',
+    width: '450px',
     margin: '5em auto auto auto',
     border: '1px solid #D3D3D3',
   },
@@ -28,7 +29,7 @@ const styles = theme => ({
     zIndex: theme.zIndex.drawer,
     color: 'white',
     margin: '0 auto auto auto',
-    backgroundColor: 'coral',
+    backgroundColor: 'black',
   },
   drawerPaper: {
     position: 'relative',
@@ -48,32 +49,32 @@ class ClippedDrawer extends Component {
 
     return (
         <div className={classes.border}>
-      <div className={classes.root}>
-        <AppBar position="absolute" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="title" color="inherit" noWrap>
-              Coin Give
-            </Typography>
-          </Toolbar>
-        </AppBar>
+          <div className={classes.root}>
+            <AppBar position="absolute" className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="title" color="inherit" noWrap>
+                  Donate Crypto
+                </Typography>
+              </Toolbar>
+            </AppBar>
 
-        <Drawer
-          variant="permanent"
-          anchor="top"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          {/*<div className={classes.toolbar} />*/}
-          <Purchase />
-        </Drawer>
+            <Drawer
+              variant="permanent"
+              anchor="top"
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <div className={classes.toolbar} />
+              <Purchase />
+            </Drawer>
 
-        {/*<main className={classes.content}>*/}
-        {/*  <div className={classes.toolbar} />*/}
-        {/*  <OrderTable />*/}
-        {/*</main>*/}
-      </div>
+            {/*<main className={classes.content}>*/}
+            {/*  <div className={classes.toolbar} />*/}
+            {/*  <OrderTable />*/}
+            {/*</main>*/}
         </div>
+      </div>
     );
   }
 }

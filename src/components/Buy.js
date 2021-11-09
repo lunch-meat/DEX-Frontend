@@ -3,29 +3,36 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
+import uniq from 'lodash/uniq';
 
 // Import Material-UI Components
 import { withStyles } from '@material-ui/core/styles';
-import {TextField, MenuItem, Icon, ListItemIcon, SvgIcon} from '@material-ui/core';
+import {MenuItem, Icon, ListItemIcon, SvgIcon} from '@material-ui/core';
+import TextField from '@mui/material/TextField';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Stack from '@mui/material/Stack';
+import Card from '@mui/material/Card';
 import Button from '@material-ui/core/Button';
 
 // Import Buy Actions
-import { productFetchData, buyOrderPostData } from '../actions/buyOrder';
+import { productFetchData, charityFetchData, buyOrderPostData } from '../actions/buyOrder';
 import {Image} from "@material-ui/icons";
 
 // import icons
 import ltc from './cryptoIcons/litecoin.jpg';
 import dotQrCode from './cryptoIcons/dot qr code.png';
+import {Typography} from "@mui/material";
 
 // Declare Styles
 const styles = theme => ({
   root: {
     textAlign: 'center',
+    marginTop: "10px",
   },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 250,
+    minWidth: 100,
     flexBasis: 200,
   },
   margin: {
@@ -51,13 +58,15 @@ class Buy extends Component {
       quantityError: false,
       buyOrderError: false,
       totalPrice: '',
-      selectedProduct: {},
+      selectedProduct: "",
+      selectedCharity: "",
     };
   }
 
   // Fetch Product Data on Componenet Mount
   componentDidMount() {
-    this.props.fetchData('https://crypto-for-charity.herokuapp.com/api/donation');
+    this.props.fetchCoins('https://crypto-for-charity.herokuapp.com/api/coins');
+    this.props.fetchCharities('https://crypto-for-charity.herokuapp.com/api/charities');
   }
 
   handleClose = () => {
@@ -65,33 +74,20 @@ class Buy extends Component {
   };
 
   // Function to handle change in Product dropdown menu
-  handleChange = event => {
-    // Declare Event Target Variables
-    const { name, value } = event.target;
-
-    this.setState({
-      [name]: value,
+  handleChange = (event, value) => {
+    this.setState({ selectedProduct: value }, () => {
+      if (value) {
+        this.setState({ totalPrice: value.price * this.state.quantityWanted });
+      }
     });
-
-    if ([name].toString() === 'name') {
-      this.setState(
-        {
-          selectedProduct: this.props.products[value],
-        },
-        () => {},
-      );
-    }
-  };
+  }
 
   handlePriceChange = event => {
     const { value } = event.target;
-
-    // If Product not selected from Dropdown OR value is string Return true
     if (!this.state.selectedProduct || isNaN(value)) {
       return true;
     }
 
-    // Declare Variables
     const { price } = this.state.selectedProduct;
 
     // Set State
@@ -100,28 +96,20 @@ class Buy extends Component {
         quantityWanted: value,
       },
       () => {
-        this.validateQuantity(value);
         this.setState({ totalPrice: price * this.state.quantityWanted });
       },
     );
   };
 
-  // Function to Validate Value
-  validateQuantity = value => {
-    if (value > this.state.selectedProduct.quantity) {
-      this.setState({
-        quantityError: true,
-        quantityLabel: `Value can not exceed ${
-          this.state.selectedProduct.quantity
-        }`,
-      });
-    } else {
-      this.setState({
-        quantityError: false,
-        quantityLabel: 'Quantity',
-      });
-    }
-  };
+  handleCharityChange = (event, value) => {
+    console.log(value);
+    this.setState(
+        {
+          selectedCharity: value,
+        },
+        () => {},
+    );
+  }
 
   // Function to Post Data
   handlePostOrder = () => {
@@ -135,57 +123,55 @@ class Buy extends Component {
       return true;
     }
 
-    let header = {
-      user: {
-        id: 1,
-      },
-      product: {
-        id: selectedProduct.id,
-        price: selectedProduct.price,
-      },
-      quantityWanted: quantityWanted,
+    let data = {
+      coin: selectedProduct.name,
+      amount: quantityWanted,
     };
-    this.props.postData('http://localhost:8000/api/order', header);
+    this.props.postData('http://localhost:3002/api/donation', data);
   };
 
   render() {
     // Declare State and Props Variable
-    const { classes, products } = this.props;
+    const { classes, products, charities } = this.props;
     const {
-      name,
       quantityWanted,
       totalPrice,
       quantityError,
-      quantityLabel,
     } = this.state;
 
-    // Declare Products Selection Component
-    // Loops through this.props.prodcuts to display products
+    const filterOptions = createFilterOptions({
+      matchFrom: 'any',
+      limit: 500,
+    });
+
+    const CharitySelection = () => (
+        <Autocomplete
+            autoComplete
+            filterOptions={filterOptions}
+            id="charity-select"
+            options={uniq(charities.map((c) => (c.name)))}
+            onChange={this.handleCharityChange.bind(this)}
+            value={this.state.selectedCharity}
+            renderInput={(params) => <TextField {...params} type="text" label="Choose a nonprofit" />}
+        >
+        </Autocomplete>
+    )
+
+    // coins
     const ProductsSelection = () => (
-      <TextField
-        select
-        id="product"
-        name="name"
-        value={name}
-        onChange={this.handleChange}
-        label="Select Coin"
-        className={classes.textField}
-        SelectProps={{
-          MenuProps: {
-            className: classes.menu,
-          },
-        }}
-        margin="normal"
-      >
-        {products.map((product, index) => (
-          <MenuItem key={index} value={index}>
-            <ListItemIcon>
-              <img src={ltc} />
-            </ListItemIcon>
-            {product.name}
-          </MenuItem>
-        ))}
-      </TextField>
+        <Autocomplete
+            disableListWrap
+            disableClearable
+            fullWidth
+            autoComplete
+            id="coin-select"
+            options={products || []}
+            value={this.state.selectedProduct || { name: "" }}
+            getOptionLabel={(o) => o?.name || ""}
+            onChange={this.handleChange.bind(this)}
+            renderInput={(params) => <TextField {...params} type="text" label="Choose a coin" />}
+        >
+        </Autocomplete>
     );
 
     const NumberFormatCustom = config => {
@@ -208,51 +194,46 @@ class Buy extends Component {
       );
     };
 
-    // Declare Price Input
-    const PriceInput = () => (
-      <TextField
-        className={classNames(classes.margin, classes.textField)}
-        value={totalPrice}
-        disabled
-        name="totalPrice"
-        id="product-price"
-        InputProps={{
-          inputComponent: NumberFormatCustom,
-        }}
-      />
-    );
-
     return (
       <div className={classes.root}>
         {products.length !== 0 ? (
           <div>
-            <ProductsSelection />
-            <TextField
-              error={quantityError}
-              type={'number'}
-              inputProps={{
-                min: '0',
-                max: this.state.selectedProduct.quantity,
-              }}
-              value={quantityWanted}
-              onChange={this.handlePriceChange}
-              label={quantityLabel}
-              name="quantityWanted"
-              id="product-quantity"
-              className={classNames(classes.margin, classes.textField)}
-            />
+            <Stack direction="column" spacing={2}>
+              <CharitySelection />
+              <ProductsSelection />
+              <Stack direction="row" spacing={2}>
+                <TextField
+                    error={quantityError}
+                    type="number"
+                    inputProps={{ min: '0' }}
+                    value={quantityWanted}
+                    onChange={this.handlePriceChange}
+                    label={`Amount${this.state.selectedProduct ? ` in ${this.state.selectedProduct.name}` : "" }`}
+                    name="quantityWanted"
+                    id="product-quantity"
+                    disabled={!this.state.selectedProduct}
+                    className={classNames(classes.margin, classes.textField)}
+                />
+                <TextField
+                    label="USD (estimated)"
+                    disabled
+                    variant="standard"
+                    value={totalPrice ? `$${Math.round(totalPrice)}` : ''}
+                    id="usd-value"
+                />
+              </Stack>
+            </Stack>
 
-            <PriceInput />
-            <div className={classNames(classes.margin)} >
-              <img src={dotQrCode} />
-            </div>
+            {/*<div className={classNames(classes.margin)} >*/}
+            {/*  <img src={dotQrCode} />*/}
+            {/*</div>*/}
             <Button
               onClick={this.handlePostOrder}
               variant="raised"
               color="primary"
               className={classes.button}
             >
-              Give Coins!
+              Donate {this.state.selectedProduct?.name}
             </Button>
           </div>
         ) : null}
@@ -272,18 +253,20 @@ class Buy extends Component {
 
 Buy.propTypes = {
   classes: PropTypes.object.isRequired,
-  fetchData: PropTypes.func.isRequired,
+  fetchCoins: PropTypes.func.isRequired,
+  fetchCharities: PropTypes.func.isRequired,
   postData: PropTypes.func.isRequired,
-  buyOrder: PropTypes.bool.isRequired,
+  onChangeIndex: PropTypes.func.isRequired,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   products: PropTypes.array.isRequired,
+  charities: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     products: state.products,
-    buyOrder: state.buyOrder,
+    charities: state.charities,
     isLoading: state.buyOrderIsLoading,
     hasErrored: state.buyOrderHasErrored,
   };
@@ -291,8 +274,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchData: url => dispatch(productFetchData(url)),
-    postData: (url, header) => dispatch(buyOrderPostData(url, header)),
+    fetchCoins: url => dispatch(productFetchData(url)),
+    fetchCharities: url => dispatch(charityFetchData(url)),
+    postData: (url, data) => dispatch(buyOrderPostData(url, data)),
   };
 };
 
