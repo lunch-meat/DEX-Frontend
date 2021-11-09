@@ -23,6 +23,8 @@ import ltc from './cryptoIcons/litecoin.jpg';
 import dotQrCode from './cryptoIcons/dot qr code.png';
 import {Typography} from "@mui/material";
 
+const API_URL = "https://crypto-for-charity.herokuapp.com/api";
+
 // Declare Styles
 const styles = theme => ({
   root: {
@@ -58,7 +60,7 @@ class Buy extends Component {
       quantityError: false,
       buyOrderError: false,
       totalPrice: '',
-      selectedProduct: "",
+      selectedProduct: { name: "" },
       selectedCharity: "",
     };
   }
@@ -82,14 +84,12 @@ class Buy extends Component {
     });
   }
 
-  handlePriceChange = event => {
+  handleAmountChange = event => {
     const { value } = event.target;
     if (!this.state.selectedProduct || isNaN(value)) {
       return true;
     }
-
     const { price } = this.state.selectedProduct;
-
     // Set State
     this.setState(
       {
@@ -113,9 +113,9 @@ class Buy extends Component {
 
   // Function to Post Data
   handlePostOrder = () => {
-    const { selectedProduct, quantityWanted } = this.state;
+    const { selectedProduct, quantityWanted, selectedCharity } = this.state;
 
-    if (!selectedProduct || quantityWanted === '' || quantityWanted === 0) {
+    if (!selectedProduct || !selectedCharity || quantityWanted === '' || quantityWanted === 0) {
       this.setState({
         buyOrderError: true,
       });
@@ -126,8 +126,9 @@ class Buy extends Component {
     let data = {
       coin: selectedProduct.name,
       amount: quantityWanted,
+      charityName: selectedCharity,
     };
-    this.props.postData('http://localhost:3002/api/donation', data);
+    this.props.postData(`${API_URL}/donation`, data);
   };
 
   render() {
@@ -169,30 +170,11 @@ class Buy extends Component {
             value={this.state.selectedProduct || { name: "" }}
             getOptionLabel={(o) => o?.name || ""}
             onChange={this.handleChange.bind(this)}
-            renderInput={(params) => <TextField {...params} type="text" label="Choose a coin" />}
+            renderInput={(params) =>
+                <TextField {...params} type="text" label="Choose a coin" />}
         >
         </Autocomplete>
     );
-
-    const NumberFormatCustom = config => {
-      const { inputRef, onChange, ...other } = config;
-
-      return (
-        <NumberFormat
-          {...other}
-          ref={inputRef}
-          onValueChange={values => {
-            onChange({
-              target: {
-                value: values.value,
-              },
-            });
-          }}
-          thousandSeparator
-          prefix="$"
-        />
-      );
-    };
 
     return (
       <div className={classes.root}>
@@ -207,7 +189,7 @@ class Buy extends Component {
                     type="number"
                     inputProps={{ min: '0' }}
                     value={quantityWanted}
-                    onChange={this.handlePriceChange}
+                    onChange={this.handleAmountChange}
                     label={`Amount${this.state.selectedProduct ? ` in ${this.state.selectedProduct.name}` : "" }`}
                     name="quantityWanted"
                     id="product-quantity"
