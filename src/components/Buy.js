@@ -9,10 +9,20 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
 import Button from '@material-ui/core/Button';
 
 // Import Buy Actions
-import { productFetchData, charityFetchData, buyOrderPostData } from '../actions/buyOrder';
+import {
+  productFetchData,
+  charityFetchData,
+  buyOrderPostData,
+  buyOrderIsLoading,
+  walletFetchDataSuccess, buyOrderPostDataSuccess, buyOrderHasErrored
+} from '../actions/buyOrder';
+import {Card, Snackbar, Typography} from "@mui/material";
+import axios from "axios";
 
 const API_URL = "https://crypto-for-charity.herokuapp.com/api";
 
@@ -53,6 +63,8 @@ class Buy extends Component {
       totalPrice: '',
       selectedProduct: { name: "" },
       selectedCharity: "",
+      walletAddress: "",
+      showWalletDialog: false,
     };
   }
 
@@ -94,22 +106,14 @@ class Buy extends Component {
 
   handleCharityChange = (event, value) => {
     console.log(value);
-    this.setState(
-        {
-          selectedCharity: value,
-        },
-        () => {},
-    );
+    this.setState({ selectedCharity: value });
   }
 
   // Function to Post Data
   handlePostOrder = () => {
     const { selectedProduct, quantityWanted, selectedCharity } = this.state;
-
     if (!selectedProduct || !selectedCharity || quantityWanted === '' || quantityWanted === 0) {
-      this.setState({
-        buyOrderError: true,
-      });
+      this.setState({ buyOrderError: true });
       alert('No coin or quantity selected');
       return true;
     }
@@ -119,7 +123,21 @@ class Buy extends Component {
       amount: quantityWanted,
       charityName: selectedCharity,
     };
-    this.props.postData(`${API_URL}/donation`, data);
+    axios.post(`${API_URL}/donation`, data)
+        .then(response => {
+          if (response.status !== 200) {
+            throw Error(response.statusText);
+          }
+
+          this.setState({ buyOrderIsLoading: false });
+          return response;
+        })
+        .then(response => {
+          console.log(response);
+          this.setState({ showWalletDialog: true, walletAddress: response.data[0] })
+        })
+        .catch(() => this.setState({ buyOrderIsErrored: false }));
+    // this.props.postData(`${API_URL}/donation`, data);
   };
 
   render() {
@@ -159,7 +177,7 @@ class Buy extends Component {
             id="coin-select"
             options={products || []}
             value={this.state.selectedProduct || { name: "" }}
-            getOptionLabel={(o) => o?.name || ""}
+            getOptionLabel={(o) => o ? o.name : ""}
             onChange={this.handleChange.bind(this)}
             renderInput={(params) =>
                 <TextField {...params} type="text" label="Choose a coin" />}
@@ -206,19 +224,21 @@ class Buy extends Component {
               color="primary"
               className={classes.button}
             >
-              Donate {this.state.selectedProduct?.name}
+              Donate {this.state.selectedProduct ? this.state.selectedProduct.name : ""}
             </Button>
           </div>
         ) : null}
-        {/*<Snackbar*/}
-        {/*  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}*/}
-        {/*  open={buyOrderError}*/}
-        {/*  onClose={this.handleClose}*/}
-        {/*  ContentProps={{*/}
-        {/*    'aria-describedby': 'message-id',*/}
-        {/*  }}*/}
-        {/*  message={<span id="message-id">Please select an order.</span>}*/}
-        {/*/>*/}
+        <Dialog
+            open={this.state.showWalletDialog}
+            onClose={() => this.setState({ showWalletDialog: false, walletAddress: null })}
+        >
+          <DialogTitle>Your Wallet Address: </DialogTitle>
+            <Card>
+              <p>
+                {this.state.walletAddress ? this.state.walletAddress.walletAddress : ""}
+              </p>
+            </Card>
+        </Dialog>
       </div>
     );
   }

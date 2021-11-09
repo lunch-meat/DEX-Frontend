@@ -17,7 +17,7 @@ export function buyOrderIsLoading(bool) {
 export function buyOrderPostDataSuccess(bool) {
   return {
     type: 'BUY_ORDER_POST_DATA_SUCCESS',
-    isSucess: bool,
+    isSuccess: bool,
   };
 }
 
@@ -36,7 +36,10 @@ export function buyOrderPostData(url, header) {
 
         return response;
       })
-      .then(response => dispatch(buyOrderPostDataSuccess(true)))
+      .then(response => {
+          dispatch(walletFetchDataSuccess(response))
+          dispatch(buyOrderPostDataSuccess(true))
+      })
       .catch(() => dispatch(buyOrderHasErrored(true)));
   };
 }
@@ -46,6 +49,13 @@ export function productFetchDataSuccess(products) {
     type: 'PRODUCT_FETCH_DATA_SUCCESS',
     products,
   };
+}
+
+export function walletFetchDataSuccess(wallet) {
+    return {
+        type: 'WALLET_FETCH_DATA_SUCCESS',
+        wallet,
+    };
 }
 
 export function charityFetchDataSuccess(charities) {
