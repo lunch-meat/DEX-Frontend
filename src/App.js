@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 
 // Import Components
 import Purchase from './containers/Purchase';
-import OrderTable from './components/OrderTable';
-import Buy from "./components/Buy";
 
 // Declare Drawer Width
 const drawerWidth = 450;

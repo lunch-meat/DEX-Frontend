@@ -2,26 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import NumberFormat from 'react-number-format';
 import uniq from 'lodash/uniq';
 
 // Import Material-UI Components
 import { withStyles } from '@material-ui/core/styles';
-import {MenuItem, Icon, ListItemIcon, SvgIcon} from '@material-ui/core';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
-import Card from '@mui/material/Card';
 import Button from '@material-ui/core/Button';
 
 // Import Buy Actions
 import { productFetchData, charityFetchData, buyOrderPostData } from '../actions/buyOrder';
-import {Image} from "@material-ui/icons";
-
-// import icons
-import ltc from './cryptoIcons/litecoin.jpg';
-import dotQrCode from './cryptoIcons/dot qr code.png';
-import {Typography} from "@mui/material";
 
 const API_URL = "https://crypto-for-charity.herokuapp.com/api";
 

@@ -6,8 +6,6 @@ import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
-import BuyIcon from '@material-ui/icons/AddShoppingCart';
-import SellIcon from '@material-ui/icons/RemoveShoppingCart';
 import { withStyles } from '@material-ui/core/styles';
 
 // Import Buy and Sell Components
