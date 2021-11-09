@@ -37,3 +37,13 @@ export function products(state = [], action) {
       return state;
   }
 }
+
+export function charities(state = [], action) {
+  switch (action.type) {
+    case 'CHARITY_FETCH_DATA_SUCCESS':
+      return action.charities;
+
+    default:
+      return state;
+  }
+}

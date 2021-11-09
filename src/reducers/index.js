@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { orders, ordersHasErrored, ordersIsLoading } from './orders';
 import {
   products,
+  charities,
   buyOrder,
   buyOrderIsLoading,
   buyOrderHasErrored,
@@ -12,6 +13,7 @@ export default combineReducers({
   ordersHasErrored,
   ordersIsLoading,
   products,
+  charities,
   buyOrder,
   buyOrderIsLoading,
   buyOrderHasErrored,

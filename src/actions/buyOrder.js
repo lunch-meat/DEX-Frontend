@@ -48,6 +48,13 @@ export function productFetchDataSuccess(products) {
   };
 }
 
+export function charityFetchDataSuccess(charities) {
+    return {
+        type: 'CHARITY_FETCH_DATA_SUCCESS',
+        charities,
+    };
+}
+
 export function productFetchData(url) {
   return dispatch => {
     axios
@@ -61,4 +68,19 @@ export function productFetchData(url) {
       })
       .then(response => dispatch(productFetchDataSuccess(response.data)));
   };
+}
+
+export function charityFetchData(url) {
+    return dispatch => {
+        axios
+            .get(url)
+            .then(response => {
+                if (response.status !== 200) {
+                    throw Error(response.statusText);
+                }
+
+                return response;
+            })
+            .then(response => dispatch(charityFetchDataSuccess(response.data)));
+    };
 }
