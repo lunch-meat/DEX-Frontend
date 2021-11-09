@@ -113,12 +113,14 @@ class Buy extends Component {
 
   // Function to Post Data
   handlePostOrder = () => {
-    this.setState({ buyOrderIsLoading: true });
+    this.setState({ buyOrderIsLoading: true, showWalletDialog: true });
     const { selectedProduct, quantityWanted, selectedCharity } = this.state;
     if (!selectedProduct || !selectedCharity || quantityWanted === '' || quantityWanted === 0) {
       this.setState({ buyOrderError: true });
       alert('No coin or quantity selected');
       return true;
+    } else {
+      this.setState({ showWalletDialog: true });
     }
 
     let data = {
@@ -225,6 +227,7 @@ class Buy extends Component {
               variant="raised"
               color="primary"
               className={classes.button}
+              disabled={this.state.buyOrderIsLoading}
             >
               Donate {this.state.selectedProduct ? this.state.selectedProduct.name : ""}
             </Button>
@@ -235,11 +238,16 @@ class Buy extends Component {
         >
             <Card>
               <div className={classes.root}>
-                <div className={classNames(classes.margin)} >Wallet address:</div>
                 <div className={classNames(classes.margin)} >
-                  {this.state.walletAddress ? this.state.walletAddress.walletAddress : ""}
+                  Send {this.state.quantityWanted} {this.state.selectedProduct.name} to this wallet address:
                 </div>
+                <div className={classNames(classes.margin)} ><b>
+                  {this.state.walletAddress ? this.state.walletAddress.walletAddress : "Loading..."}
+                </b></div>
                 <div className={classNames(classes.margin)} ><img src={dotqrcode} /></div>
+                <div className={classNames(classes.margin)}>
+                  Nonprofit: {this.state.selectedCharity}
+                </div>
               </div>
             </Card>
         </Dialog>
