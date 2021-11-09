@@ -53,7 +53,7 @@ class Purchase extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="black">
+        <AppBar position="static" color="inherit">
           <Tabs
             value={value}
             onChange={this.handleChange}

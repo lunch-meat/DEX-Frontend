@@ -27,7 +27,7 @@ const styles = theme => ({
     zIndex: theme.zIndex.drawer,
     color: 'white',
     margin: '0 auto auto auto',
-    backgroundColor: 'black',
+    backgroundColor: 'primary',
   },
   drawerPaper: {
     position: 'relative',
@@ -63,7 +63,7 @@ class ClippedDrawer extends Component {
                 paper: classes.drawerPaper,
               }}
             >
-              <div className={classes.toolbar} />
+              {/*<div className={classes.toolbar} />*/}
               <Purchase />
             </Drawer>
 

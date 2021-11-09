@@ -11,6 +11,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@material-ui/core/Button';
 
 // Import Buy Actions
@@ -23,6 +24,7 @@ import {
 } from '../actions/buyOrder';
 import {Card, Snackbar, Typography} from "@mui/material";
 import axios from "axios";
+import dotqrcode from './cryptoIcons/dot qr code.png';
 
 const API_URL = "https://crypto-for-charity.herokuapp.com/api";
 
@@ -111,6 +113,7 @@ class Buy extends Component {
 
   // Function to Post Data
   handlePostOrder = () => {
+    this.setState({ buyOrderIsLoading: true });
     const { selectedProduct, quantityWanted, selectedCharity } = this.state;
     if (!selectedProduct || !selectedCharity || quantityWanted === '' || quantityWanted === 0) {
       this.setState({ buyOrderError: true });
@@ -187,7 +190,6 @@ class Buy extends Component {
 
     return (
       <div className={classes.root}>
-        {products.length !== 0 ? (
           <div>
             <Stack direction="column" spacing={2}>
               <CharitySelection />
@@ -227,16 +229,18 @@ class Buy extends Component {
               Donate {this.state.selectedProduct ? this.state.selectedProduct.name : ""}
             </Button>
           </div>
-        ) : null}
         <Dialog
             open={this.state.showWalletDialog}
             onClose={() => this.setState({ showWalletDialog: false, walletAddress: null })}
         >
-          <DialogTitle>Your Wallet Address: </DialogTitle>
             <Card>
-              <p>
-                {this.state.walletAddress ? this.state.walletAddress.walletAddress : ""}
-              </p>
+              <div className={classes.root}>
+                <div className={classNames(classes.margin)} >Wallet address:</div>
+                <div className={classNames(classes.margin)} >
+                  {this.state.walletAddress ? this.state.walletAddress.walletAddress : ""}
+                </div>
+                <div className={classNames(classes.margin)} ><img src={dotqrcode} /></div>
+              </div>
             </Card>
         </Dialog>
       </div>
