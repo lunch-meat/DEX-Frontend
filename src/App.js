@@ -1,84 +1,51 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-// Import Material-Ui Componenets
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import DonationWidget from './components/DonationWidget';
 
-// Import Components
-import Purchase from './containers/Purchase';
-
-// Declare Drawer Width
-const drawerWidth = 450;
-
-// Declare Styles
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    display: 'flex',
-    width: '450px',
-    margin: '5em auto auto auto',
-    border: '1px solid #D3D3D3',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer,
-    color: 'white',
-    margin: '0 auto auto auto',
-    backgroundColor: 'primary',
-  },
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    minWidth: 0, // So the Typography noWrap works
-  },
-  toolbar: theme.mixins.toolbar,
-});
-
-class ClippedDrawer extends Component {
-  render() {
-    const { classes } = this.props;
-
+function Copyright() {
     return (
-        <div className={classes.border}>
-          <div className={classes.root}>
-            <AppBar position="absolute" className={classes.appBar}>
-              <Toolbar>
-                <Typography variant="title" color="inherit" noWrap>
-                  Donate Crypto
-                </Typography>
-              </Toolbar>
-            </AppBar>
-
-            <Drawer
-              variant="permanent"
-              anchor="top"
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-            >
-              {/*<div className={classes.toolbar} />*/}
-              <Purchase />
-            </Drawer>
-
-            {/*<main className={classes.content}>*/}
-            {/*  <div className={classes.toolbar} />*/}
-            {/*  <OrderTable />*/}
-            {/*</main>*/}
-        </div>
-      </div>
+        <Typography variant="body2" color="text.secondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
     );
-  }
 }
 
-ClippedDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+const theme = createTheme();
 
-export default withStyles(styles)(ClippedDrawer);
+export default function Donate() {
+  return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar
+            position="absolute"
+            color="default"
+            elevation={0}
+            sx={{
+              position: 'relative',
+              borderBottom: (t) => `1px solid ${t.palette.divider}`,
+              color: "#ffffff",
+              backgroundColor: "#1976d2",
+            }}
+        >
+          <Toolbar>
+            <Typography variant="h6" color="inherit" noWrap>
+              Crypto 4 Charity
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <DonationWidget />
+        <Copyright />
+      </ThemeProvider>
+  );
+}
