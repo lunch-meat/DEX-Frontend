@@ -12,7 +12,16 @@ import StepLabel from "@mui/material/StepLabel";
 import axios from "axios";
 import { Close } from "@mui/icons-material";
 import Container from "@mui/material/Container";
-import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+    Alert,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Snackbar,
+    SnackbarContent
+} from "@mui/material";
 import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
 
@@ -21,18 +30,7 @@ const fetchCharitiesApi = `${API_BASE_URL}charities`;
 const fetchCoinsApi = `${API_BASE_URL}coins`;
 const postDonationApi = `${API_BASE_URL}donation`;
 
-const steps = ['Donation Details', 'Send Crypto'];
-
-const fetchData = async (url, callback) => {
-    try {
-        const response = await fetch(url);
-        const json = await response.json();
-        console.log(json);
-        callback(json)
-    } catch(e) {
-        console.log("error", e);
-    }
-};
+const steps = ['Details', 'Send Crypto', 'Confirm'];
 
 export default (() => {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -46,6 +44,19 @@ export default (() => {
     const [email, setEmail] = useState(null);
     const [isReceiptRequested, setIsReceiptRequested] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [hasError, setHasError] = useState(false);
+
+    const fetchData = async (url, callback) => {
+        try {
+            const response = await fetch(url);
+            const json = await response.json();
+            console.log(json);
+            callback(json)
+        } catch(e) {
+            setHasError(true);
+            console.log("error", e);
+        }
+    };
 
     useEffect(() => {
         if (!charities) fetchData(fetchCharitiesApi, setCharities).then();
@@ -73,6 +84,7 @@ export default (() => {
                 setInvoice(response.data[0]);
             }
         } catch(e) {
+            setHasError(true);
             console.log("error", e);
         }
     }
@@ -110,7 +122,7 @@ export default (() => {
                             </Step>
                         ))}
                     </Stepper>
-                    {(activeStep === 0) ? (
+                    {(activeStep === 0) && (
                         <Fragment variant="outlined" fullWidth onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
@@ -211,7 +223,7 @@ export default (() => {
                                 </Grid>
                             </Grid>
                         </Fragment>
-                    ) : (
+                    )} {(activeStep === 1) && (
                         <SendCrypto
                             amount={amount}
                             walletAddress={invoice ? invoice.walletAddress : invoice}
@@ -222,6 +234,11 @@ export default (() => {
                             handleBack={handleBack}
                             handleNext={handleNext}
                         />
+                    )}
+                    {(activeStep === 3) && (
+                        <Typography variant="h5" >
+                            Thank you for your donation!
+                        </Typography>
                     )}
                     <Dialog open={isDialogOpen}>
                         <DialogTitle>
@@ -254,6 +271,15 @@ export default (() => {
                             </Button>
                         </DialogActions>
                     </Dialog>
+                    <Snackbar
+                        open={hasError}
+                        anchorOrigin={{ vertical: 'botton', horizontal: 'center' }}
+                        autoHideDuration={6000}
+                    >
+                        <Alert severity="error">
+                            Oops something went wrong.
+                        </Alert>
+                    </Snackbar>
                 </Paper>
             </Container>
         </Fragment>
