@@ -10,7 +10,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import axios from "axios";
-import { Close } from "@mui/icons-material";
+import {Close, Warning} from "@mui/icons-material";
 import Container from "@mui/material/Container";
 import {
     Alert,
@@ -20,7 +20,6 @@ import {
     DialogContent,
     DialogTitle,
     Snackbar,
-    SnackbarContent
 } from "@mui/material";
 import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
@@ -30,7 +29,7 @@ const fetchCharitiesApi = `${API_BASE_URL}charities`;
 const fetchCoinsApi = `${API_BASE_URL}coins`;
 const postDonationApi = `${API_BASE_URL}donation`;
 
-const steps = ['Details', 'Send Crypto', 'Confirm'];
+const steps = ['Details', 'Send', 'Confirm'];
 
 export default (() => {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -99,7 +98,8 @@ export default (() => {
         setIsDialogOpen(true);
     }
 
-    const handleFinish = () => {
+    const handleConfirm = () => {
+        setActiveStep(3);
         setIsDialogOpen(false);
     }
 
@@ -238,11 +238,24 @@ export default (() => {
                     {(activeStep === 3) && (
                         <Typography variant="h5" >
                             Thank you for your donation!
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    setSelectedCoin(null)
+                                    setSelectedCharity(null)
+                                    setHasSubmitted(false)
+                                    setHasError(false)
+                                    setActiveStep(0)
+                                }}
+                                sx={{ mt: 3, ml: 1 }}
+                            >
+                                Make another donation
+                            </Button>
                         </Typography>
                     )}
                     <Dialog open={isDialogOpen}>
                         <DialogTitle>
-                            Did you send crypto to this wallet?
+                            <Warning fontSize="small"/>    Did you send crypto to this wallet?
                         </DialogTitle>
                         <DialogContent>
                             Your confirmation lets us know whether to expect funds at this address.
@@ -264,7 +277,7 @@ export default (() => {
                                 type="submit"
                                 fullWidth
                                 sx={{ mt: 3, ml: 1 }}
-                                onClick={handleFinish}
+                                onClick={handleConfirm}
                                 startIcon={<Check />}
                             >
                                 Yes, I sent crypto
