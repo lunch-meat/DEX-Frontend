@@ -94,11 +94,17 @@ export default (() => {
         setIsDialogOpen(true);
     };
 
+    const handleConfirmNo = () => {
+        setActiveStep(0);
+        setInvoice(null);
+        setIsDialogOpen(false);
+    };
+
     const handleNext = () => {
         setIsDialogOpen(true);
     }
 
-    const handleConfirm = () => {
+    const handleConfirmYes = () => {
         setActiveStep(3);
         setIsDialogOpen(false);
     }
@@ -236,21 +242,23 @@ export default (() => {
                         />
                     )}
                     {(activeStep === 3) && (
-                        <Typography variant="h5" >
+                        <Typography variant="h5">
                             Thank you for your donation!
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    setSelectedCoin(null)
-                                    setSelectedCharity(null)
-                                    setHasSubmitted(false)
-                                    setHasError(false)
-                                    setActiveStep(0)
-                                }}
-                                sx={{ mt: 3, ml: 1 }}
-                            >
-                                Make another donation
-                            </Button>
+                            <center>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        setSelectedCoin(null)
+                                        setSelectedCharity(null)
+                                        setHasSubmitted(false)
+                                        setHasError(false)
+                                        setActiveStep(0)
+                                    }}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                    Make another donation
+                                </Button>
+                        </center>
                         </Typography>
                     )}
                     <Dialog open={isDialogOpen}>
@@ -267,7 +275,7 @@ export default (() => {
                                 type="button"
                                 fullWidth
                                 sx={{ mt: 3, ml: 1 }}
-                                onClick={handleBack}
+                                onClick={handleConfirmNo}
                                 startIcon={<Close />}
                             >
                                 Nope, I didn't send crypto
@@ -277,7 +285,7 @@ export default (() => {
                                 type="submit"
                                 fullWidth
                                 sx={{ mt: 3, ml: 1 }}
-                                onClick={handleConfirm}
+                                onClick={handleConfirmYes}
                                 startIcon={<Check />}
                             >
                                 Yes, I sent crypto
