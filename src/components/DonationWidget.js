@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
+import {yellow} from "@material-ui/core/colors";
 
 const API_BASE_URL = 'https://crypto-for-charity.herokuapp.com/api/';
 const fetchCharitiesApi = `${API_BASE_URL}charities`;
@@ -138,7 +139,7 @@ export default (() => {
                                         fullWidth
                                         filterOptions={filterOptions}
                                         id="charity-select"
-                                        options={uniq(charities || [])}
+                                        options={uniq(charities || [{ name: '...Loading' }])}
                                         onChange={(e, val) => setSelectedCharity(val)}
                                         getOptionLabel={(o) => o ? o.name : ""}
                                         value={selectedCharity}
@@ -160,7 +161,7 @@ export default (() => {
                                         fullWidth
                                         filterOptions={filterOptions}
                                         id="coin-select"
-                                        options={coins || []}
+                                        options={coins || [{ name: '...Loading', fullName: "" }]}
                                         onChange={(e, val) => setSelectedCoin(val)}
                                         getOptionLabel={(o) => o ? `${o.name} (${o.fullName})` : ""}
                                         value={selectedCoin}
@@ -249,6 +250,7 @@ export default (() => {
                                     variant="contained"
                                     onClick={() => {
                                         setSelectedCoin(null)
+                                        setIsReceiptRequested(null)
                                         setSelectedCharity(null)
                                         setHasSubmitted(false)
                                         setHasError(false)
@@ -263,10 +265,11 @@ export default (() => {
                     )}
                     <Dialog open={isDialogOpen}>
                         <DialogTitle>
-                            <Warning fontSize="small"/>    Did you send crypto to this wallet?
+                            <Warning fontSize="medium" color="warning"/>    Did you send crypto to this wallet?
                         </DialogTitle>
                         <DialogContent>
-                            Your confirmation lets us know whether to expect funds at this address.
+                            Your confirmation lets us know whether or not to expect funds at this address.
+
                             If yes, then the wallet will remain active for 24 hours or until your transaction is clears.
                         </DialogContent>
                         <DialogActions>
@@ -298,7 +301,7 @@ export default (() => {
                         autoHideDuration={6000}
                     >
                         <Alert severity="error">
-                            Oops something went wrong.
+                            Oops, something went wrong.
                         </Alert>
                     </Snackbar>
                 </Paper>
