@@ -1,9 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import FormControl from '@material-ui/core/FormControl';
 import uniq from "lodash/uniq";
 import TextField from "@mui/material/TextField";
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
@@ -12,10 +10,11 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import axios from "axios";
-import { CopyToClipboard } from "react-copy-to-clipboard/lib/Component";
-import { ContentCopy } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import Container from "@mui/material/Container";
-import {Checkbox} from "@mui/material";
+import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import SendCrypto from "./SendCrypto";
+import { Check } from "@material-ui/icons";
 
 const API_BASE_URL = 'https://crypto-for-charity.herokuapp.com/api/';
 const fetchCharitiesApi = `${API_BASE_URL}charities`;
@@ -46,11 +45,12 @@ export default (() => {
     const [invoice, setInvoice] = useState(null);
     const [email, setEmail] = useState(null);
     const [isReceiptRequested, setIsReceiptRequested] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         if (!charities) fetchData(fetchCharitiesApi, setCharities).then();
         if (!coins) fetchData(fetchCoinsApi, setCoins).then();
-    }, []);
+    }, [charities, setCharities, coins, setCoins]);
 
     const handleSubmit = async () => {
         setHasSubmitted(true);
@@ -78,8 +78,18 @@ export default (() => {
     }
 
     const handleBack = () => {
-        setActiveStep(activeStep - 1);
+        setActiveStep(0);
+        setInvoice(null);
+        setIsDialogOpen(true);
     };
+
+    const handleNext = () => {
+        setIsDialogOpen(true);
+    }
+
+    const handleFinish = () => {
+        setIsDialogOpen(false);
+    }
 
     const filterOptions = createFilterOptions({
         matchFrom: 'any',
@@ -100,8 +110,8 @@ export default (() => {
                             </Step>
                         ))}
                     </Stepper>
-                    {activeStep === 0 ? (
-                        <FormControl variant="outlined" fullWidth onSubmit={handleSubmit}>
+                    {(activeStep === 0) ? (
+                        <Fragment variant="outlined" fullWidth onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <Autocomplete
@@ -177,6 +187,7 @@ export default (() => {
                                 {isReceiptRequested && (
                                     <Grid item xs={12} >
                                         <TextField
+                                            required
                                             variant="standard"
                                             type="text"
                                             label="Email"
@@ -187,7 +198,7 @@ export default (() => {
                                         />
                                     </Grid>
                                 )}
-                                <Grid item item xs={12} >
+                                <Grid item xs={12} >
                                     <Button
                                         variant="contained"
                                         type="submit"
@@ -199,40 +210,50 @@ export default (() => {
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </FormControl>
-                    ) : (
-                        <Fragment>
-                            <Typography variant="h6" align="center">
-                                Send {amount} {selectedCoin && selectedCoin.name} to this wallet address:
-                            </Typography>
-                            <Typography variant="body1" align="center" sx={{ mt: 3, ml: 1 }}>
-                                {invoice ? (
-                                    <CopyToClipboard text={invoice.walletAddress}>
-                                        <Button variant="outlined" >{invoice.walletAddress} <ContentCopy /></Button>
-                                    </CopyToClipboard>
-                                ) : "...Loading"}
-
-                            </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button
-                                    variant="outlined"
-                                    type="button"
-                                    sx={{ mt: 3, ml: 1 }}
-                                    onClick={handleBack}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    type="submit"
-                                    sx={{ mt: 3, ml: 1 }}
-                                    onClick={handleBack}
-                                >
-                                    Finished
-                                </Button>
-                            </Box>
                         </Fragment>
-                        )}
+                    ) : (
+                        <SendCrypto
+                            amount={amount}
+                            walletAddress={invoice ? invoice.walletAddress : invoice}
+                            coinName={selectedCoin ? selectedCoin.name : ""}
+                            coinFullName={selectedCoin ? selectedCoin.fullName : ""}
+                            charityName={selectedCharity ? selectedCharity.name : ""}
+                            ein={selectedCharity ? selectedCharity.ein : ""}
+                            handleBack={handleBack}
+                            handleNext={handleNext}
+                        />
+                    )}
+                    <Dialog open={isDialogOpen}>
+                        <DialogTitle>
+                            Did you send crypto to this wallet?
+                        </DialogTitle>
+                        <DialogContent>
+                            Your confirmation lets us know whether to expect funds at this address.
+                            If yes, then the wallet will remain active for 24 hours or until your transaction is clears.
+                        </DialogContent>
+                        <DialogActions>
+                            <Button
+                                variant="text"
+                                type="button"
+                                fullWidth
+                                sx={{ mt: 3, ml: 1 }}
+                                onClick={handleBack}
+                                startIcon={<Close />}
+                            >
+                                Nope, I didn't send crypto
+                            </Button>
+                            <Button
+                                variant="text"
+                                type="submit"
+                                fullWidth
+                                sx={{ mt: 3, ml: 1 }}
+                                onClick={handleFinish}
+                                startIcon={<Check />}
+                            >
+                                Yes, I sent crypto
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Paper>
             </Container>
         </Fragment>

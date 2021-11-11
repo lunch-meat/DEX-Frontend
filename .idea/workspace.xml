@@ -2,22 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0823ef34-ed41-4369-b93c-400803d46805" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/DonationWidget.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CountdownTimer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/DonationDetails.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SendCrypto.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/buyOrder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/orders.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Buy.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/OrderTable.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sell.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CharitySelector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Purchase.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/buyOrder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/orders.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/configureStore.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CharitySelector.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DonationWidget.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DonationWidget.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,15 +40,13 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -73,6 +63,7 @@
       <workItem from="1635897863316" duration="10670000" />
       <workItem from="1636023121683" duration="51000" />
       <workItem from="1636031761710" duration="11732000" />
+      <workItem from="1636585711173" duration="12646000" />
     </task>
     <servers />
   </component>
