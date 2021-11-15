@@ -23,7 +23,6 @@ import {
 } from "@mui/material";
 import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
-import {yellow} from "@material-ui/core/colors";
 
 const API_BASE_URL = 'https://crypto-for-charity.herokuapp.com/api/';
 const fetchCharitiesApi = `${API_BASE_URL}charities`;
@@ -139,7 +138,7 @@ export default (() => {
                                         fullWidth
                                         filterOptions={filterOptions}
                                         id="charity-select"
-                                        options={uniq(charities || [{ name: '...Loading' }])}
+                                        options={charities || [{ name: '...Loading' }]}
                                         onChange={(e, val) => setSelectedCharity(val)}
                                         getOptionLabel={(o) => o ? o.name : ""}
                                         value={selectedCharity}
@@ -188,7 +187,6 @@ export default (() => {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
                                         disabled
                                         variant="standard"
                                         type="text"

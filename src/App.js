@@ -27,25 +27,7 @@ export default function Donate() {
   return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar
-            position="absolute"
-            color="default"
-            elevation={0}
-            sx={{
-              position: 'relative',
-              borderBottom: (t) => `1px solid ${t.palette.divider}`,
-              color: "#ffffff",
-              backgroundColor: "#1976d2",
-            }}
-        >
-          <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
-              Crypto 4 Charity
-            </Typography>
-          </Toolbar>
-        </AppBar>
         <DonationWidget />
-        <Copyright />
       </ThemeProvider>
   );
 }
