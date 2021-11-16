@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import DonationWidget from './components/DonationWidget';
 
-const theme = createTheme();
+const theme = createTheme({ palette: { primary: { main: "#F08E80" }}});
 
 export default function Donate() {
   return (
