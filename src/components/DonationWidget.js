@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import uniq from "lodash/uniq";
 import TextField from "@mui/material/TextField";
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,16 +12,16 @@ import axios from "axios";
 import {Close, Warning} from "@mui/icons-material";
 import Container from "@mui/material/Container";
 import {
-    Alert,
     Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Snackbar,
 } from "@mui/material";
 import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
+import ErrorSnackAlert from "./ErrorSnackAlert";
+import ThankYouPage from "./ThankYouPage";
 
 const API_BASE_URL = 'https://crypto-for-charity.herokuapp.com/api/';
 const fetchCharitiesApi = `${API_BASE_URL}charities`;
@@ -37,7 +36,7 @@ export default (() => {
     const [coins, setCoins] = useState(null);
     const [selectedCharity, setSelectedCharity] = useState(null);
     const [selectedCoin, setSelectedCoin] = useState(null);
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState(1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [invoice, setInvoice] = useState(null);
     const [email, setEmail] = useState(null);
@@ -109,6 +108,19 @@ export default (() => {
         setIsDialogOpen(false);
     }
 
+    const resetForm = () => {
+        setSelectedCoin(null);
+        setIsReceiptRequested(null);
+        setEmail(null);
+        setAmount(1);
+        setInvoice(null);
+        setIsDialogOpen(false);
+        setSelectedCharity(null);
+        setHasSubmitted(false);
+        setHasError(false);
+        setActiveStep(0);
+    }
+
     const filterOptions = createFilterOptions({
         matchFrom: 'any',
         limit: 500,
@@ -175,7 +187,7 @@ export default (() => {
                                         }
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={6} sm={6}>
                                     <TextField
                                         required
                                         type="number"
@@ -185,7 +197,7 @@ export default (() => {
                                         error={(!amount || amount === 0) && hasSubmitted}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={6} sm={6}>
                                     <TextField
                                         disabled
                                         variant="standard"
@@ -241,26 +253,8 @@ export default (() => {
                         />
                     )}
                     {(activeStep === 3) && (
-                        <Typography variant="h5">
-                            Thank you for your donation!
-                            <center>
-                                <Button
-                                    variant="contained"
-                                    onClick={() => {
-                                        setSelectedCoin(null)
-                                        setIsReceiptRequested(null)
-                                        setSelectedCharity(null)
-                                        setHasSubmitted(false)
-                                        setHasError(false)
-                                        setActiveStep(0)
-                                    }}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    Make another donation
-                                </Button>
-                        </center>
-                        </Typography>
-                    )}
+                        <ThankYouPage resetDonationDetails={resetForm} />
+                        )}
                     <Dialog open={isDialogOpen}>
                         <DialogTitle>
                             <Warning fontSize="medium" color="warning"/>    Did you send crypto to this wallet?
@@ -293,15 +287,7 @@ export default (() => {
                             </Button>
                         </DialogActions>
                     </Dialog>
-                    <Snackbar
-                        open={hasError}
-                        anchorOrigin={{ vertical: 'botton', horizontal: 'center' }}
-                        autoHideDuration={6000}
-                    >
-                        <Alert severity="error">
-                            Oops, something went wrong.
-                        </Alert>
-                    </Snackbar>
+                    <ErrorSnackAlert hasError={hasError} setHasError={setHasError} />
                 </Paper>
             </Container>
         </Fragment>

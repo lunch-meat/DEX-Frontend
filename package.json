@@ -1,6 +1,6 @@
 {
-  "name": "dex-frontend",
-  "version": "0.1.0",
+  "name": "crypto-for-charity",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.5.0",
@@ -17,11 +17,8 @@
     "react-countdown-circle-timer": "^2.5.4",
     "react-dom": "^16.4.0",
     "react-number-format": "^3.3.4",
-    "react-redux": "^5.0.7",
-    "react-scripts": "^3.4.4",
-    "react-swipeable-views": "^0.12.13",
-    "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "react-scripts": "1.1.4",
+    "react-swipeable-views": "^0.12.13"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,10 +1,10 @@
 import Typography from "@mui/material/Typography";
-import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import { CopyToClipboard } from "react-copy-to-clipboard/lib/Component";
 import Button from "@mui/material/Button";
 import {ContentCopy} from "@mui/icons-material";
 import Container from "@mui/material/Container";
 import CountdownTimer from "./CountdownTimer";
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import { Stack } from "@mui/material";
 
 export default (({ ...props }) => {
@@ -19,7 +19,7 @@ export default (({ ...props }) => {
     } = props;
     return (
         <Fragment>
-            <Container align="center">
+            <Container align="center" >
                 <CountdownTimer onComplete={handleNext} />
             </Container>
             <Typography variant="h6" align="center" sx={{ mt: 3, ml: 1 }}>
@@ -28,7 +28,7 @@ export default (({ ...props }) => {
             <Typography variant="body1" align="center" sx={{ mt: 3, ml: 1 }}>
                 {walletAddress ? (
                     <CopyToClipboard text={walletAddress}>
-                        <Button variant="outlined" >{`${walletAddress}    `} <ContentCopy />COPY</Button>
+                        <Button variant="outlined" endIcon={<ContentCopy />}>{`${walletAddress}    `} </Button>
                     </CopyToClipboard>
                 ) : "...Loading"}
             </Typography>
@@ -46,7 +46,7 @@ export default (({ ...props }) => {
                         sx={{ mt: 3, ml: 1 }}
                         onClick={handleBack}
                     >
-                        Go Back
+                        Cancel
                     </Button>
                     <Button
                         variant="contained"
