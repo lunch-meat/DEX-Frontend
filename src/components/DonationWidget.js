@@ -22,6 +22,7 @@ import SendCrypto from "./SendCrypto";
 import { Check } from "@material-ui/icons";
 import ErrorSnackAlert from "./ErrorSnackAlert";
 import ThankYouPage from "./ThankYouPage";
+import texas from './cryptoIcons/texas.png';
 
 const API_BASE_URL = 'https://crypto-for-charity.herokuapp.com/api/';
 const fetchCharitiesApi = `${API_BASE_URL}charities`;
@@ -34,7 +35,7 @@ export default (() => {
     const [activeStep, setActiveStep] = React.useState(0);
     const [charities, setCharities] = useState(null);
     const [coins, setCoins] = useState(null);
-    const [selectedCharity, setSelectedCharity] = useState(null);
+    const [selectedCharity, setSelectedCharity] = useState({ name: 'Texas', ein: '000000', });
     const [selectedCoin, setSelectedCoin] = useState(null);
     const [amount, setAmount] = useState(1);
     const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -130,9 +131,7 @@ export default (() => {
         <Fragment>
             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                 <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                    <Typography component="h1" variant="h4" align="center">
-                        Donate Crypto
-                    </Typography>
+                    <center><img src={texas} width="50%" height="50%" /></center>
                     <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                         {steps.map((label) => (
                             <Step key={label}>
@@ -143,28 +142,6 @@ export default (() => {
                     {(activeStep === 0) && (
                         <Fragment variant="outlined" fullWidth onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <Autocomplete
-                                        autoComplete
-                                        selectOnFocus
-                                        fullWidth
-                                        filterOptions={filterOptions}
-                                        id="charity-select"
-                                        options={charities || [{ name: '...Loading' }]}
-                                        onChange={(e, val) => setSelectedCharity(val)}
-                                        getOptionLabel={(o) => o ? o.name : ""}
-                                        value={selectedCharity}
-                                        renderInput={(params) =>
-                                            <TextField
-                                                {...params}
-                                                required
-                                                type="text"
-                                                label="Choose a nonprofit"
-                                                error={!selectedCharity && hasSubmitted}
-                                            />
-                                        }
-                                    />
-                                </Grid>
                                 <Grid item xs={12}>
                                     <Autocomplete
                                         autoComplete

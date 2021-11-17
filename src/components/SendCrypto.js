@@ -25,7 +25,7 @@ export default (({ ...props }) => {
             <Typography variant="h6" align="center" sx={{ mt: 3 }}>
                 Send {amount} {coinFullName} ({coinName}) to this wallet address:
             </Typography>
-            <Typography variant="caption" align="center" sx={{ mt: 3 }} >
+            <center><Typography variant="caption" align="center" sx={{ mt: 3 }} >
                 {walletAddress ? (
                     <CopyToClipboard text={walletAddress}>
                         <Button variant="outlined" endIcon={<ContentCopy />}>
@@ -35,7 +35,7 @@ export default (({ ...props }) => {
                         </Button>
                     </CopyToClipboard>
                 ) : "...Loading"}
-            </Typography>
+            </Typography></center>
             <center>
             <Typography variant="caption" align="center" sx={{ mt: 3, ml: 1 }}>
                 This address is for one time use only for {charityName}.
